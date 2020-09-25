@@ -24,29 +24,12 @@ public class ParticipatesDAOImpl implements ParticipatesDAO{
 		String sql = "INSERT INTO Participa (NumProjeto, MatProfessor)"
 					+ " VALUES( " + participates.getProject().getProjectNumber() + ", " + participates.getProfessor().getReg_number() + " )";
 		
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-			PreparedStatement pstm = connection.prepareStatement(sql)){
-			pstm.executeUpdate();
-     	   
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
 	public boolean delete(Long projectNumber, Long professorRegNumber) {
 		String sql = "DELETE FROM Participa WHERE NumProjeto = " + projectNumber + " AND MatProfessor = " + professorRegNumber;
 
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-		PreparedStatement pstm = connection.prepareStatement(sql)){
-		ResultSet rs =	pstm.executeQuery();
-		
-		return rs.rowDeleted();
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
 		return true;
 	}
 		
@@ -54,29 +37,6 @@ public class ParticipatesDAOImpl implements ParticipatesDAO{
 	public ArrayList<Participates> listByProjectNumber(Long projectNumber){
 		String sql = "SELECT * FROM Participa WHERE NumProjeto = " + projectNumber;
 		ArrayList<Participates> participatess = new ArrayList<Participates>();
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				ResultSet rs = pstm.executeQuery();
-				
-				while(rs.next()) {
-					Participates participates = new Participates();
-					Long professorRegNumber = rs.getLong("MatProfessor");
-					
-					ProjectDAOImpl projectDAOImpl = new ProjectDAOImpl();
-					Project project = projectDAOImpl.listByProjectNumber(projectNumber);
-					
-					ProfessorDAOImpl professorDAOImpl = new ProfessorDAOImpl();
-					Professor professor = professorDAOImpl.listByRegNumber(professorRegNumber);
-					
-					participates.setProject(project);
-					participates.setProfessor(professor);
-					
-					participatess.add(participates);
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		return participatess;
 	}
 }

@@ -37,13 +37,6 @@ import com.example.myapp.model.Project;
 						+ " , DataFim = '" + project.getEndDate() + "'";
 			}
 			
-			try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				pstm.executeUpdate();
-	     	   
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 
 		}
 
@@ -51,15 +44,7 @@ import com.example.myapp.model.Project;
 		public boolean delete(Long id) {
 			String sql = "DELETE FROM projeto WHERE Numero = " + id;
 
-			try(Connection connection = DatabaseConnection.getInstance().getConnection();
-			PreparedStatement pstm = connection.prepareStatement(sql)){
-			ResultSet rs = pstm.executeQuery();
 			
-			return rs.rowDeleted();
-			
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 			return false;
 		}
 
@@ -67,31 +52,7 @@ import com.example.myapp.model.Project;
 		public ArrayList<Project> listAll(){
 			String sql = "SELECT * FROM Projeto";
 			ArrayList<Project> projects = new ArrayList<>();
-			try(Connection connection = DatabaseConnection.getInstance().getConnection();
-					PreparedStatement pstm = connection.prepareStatement(sql)){
-					ResultSet rs = pstm.executeQuery();
-					
-					while(rs.next()) {
-						Project project = new Project();
-						Long projectNumber = rs.getLong("Numero");
-						String financier = rs.getString("Financiador");
-						Timestamp startDate = rs.getTimestamp("DataInicio");
-						Timestamp endDate = rs.getTimestamp("DataFim");
-						float budget = rs.getFloat("Orcamento");
-						Long profLeaderRegNumber = rs.getLong("MatGerente");
-						Professor profLeader = professorDAOImpl.listByRegNumber(profLeaderRegNumber);
-						project.setProjectNumber(projectNumber);
-						project.setFinancier(financier);
-						project.setBudget(budget);
-						project.setStartDate(startDate);
-						project.setEndDate(endDate);
-						project.setProfLeader(profLeader);
-						projects.add(project);
-					}
-					
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		
 			return projects;
 		}
 		
@@ -99,30 +60,7 @@ import com.example.myapp.model.Project;
 			
 			String sql = "SELECT * FROM Projeto WHERE Numero = " + projectNumber;
 			Project project = new Project();
-			try(Connection connection = DatabaseConnection.getInstance().getConnection();
-					PreparedStatement pstm = connection.prepareStatement(sql)){
-				
-					ResultSet rs = pstm.executeQuery();
-					
-					if(rs.next()) {
-						
-						String financier = rs.getString("Financiador");
-						Timestamp startDate = rs.getTimestamp("DataInicio");
-						Timestamp endDate = rs.getTimestamp("DataFim");
-						float budget = rs.getFloat("Orcamento");
-						Long profLeaderRegNumber = rs.getLong("MatGerente");
-						Professor profLeader = professorDAOImpl.listByRegNumber(profLeaderRegNumber);
-						project.setProjectNumber(projectNumber);
-						project.setFinancier(financier);
-						project.setBudget(budget);
-						project.setStartDate(startDate);
-						project.setEndDate(endDate);
-						project.setProfLeader(profLeader);
-					}
-					
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		
 			return project;
 		}
 		
@@ -131,17 +69,6 @@ import com.example.myapp.model.Project;
 			String sql = "SELECT * FROM Projeto WHERE Numero = " + project.getProjectNumber();
 			boolean exists = false;
 			
-			try(Connection connection = DatabaseConnection.getInstance().getConnection();
-					PreparedStatement pstm = connection.prepareStatement(sql)){
-					ResultSet rs = pstm.executeQuery();
-					
-					if(rs.next()) {
-						exists = true;
-					}
-					
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 			
 			return exists;
 		}

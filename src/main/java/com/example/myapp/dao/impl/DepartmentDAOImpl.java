@@ -22,17 +22,6 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 		String sql = "SELECT * FROM Departamento WHERE Numero = " + department.getDep_number();
 		boolean exists = false;
 		
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				ResultSet rs = pstm.executeQuery();
-				
-				if(rs.next()) {
-					exists = true;
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		
 		return exists;
 	}
@@ -61,29 +50,12 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 					+ " WHERE Numero = " + department.getDep_number();
 		}
 		
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-			PreparedStatement pstm = connection.prepareStatement(sql)){
-			pstm.executeUpdate();
-     	   
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
 	public boolean delete(Long id) {
 		String sql = "DELETE FROM Departamento WHERE Numero = " + id;
 
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-		PreparedStatement pstm = connection.prepareStatement(sql)){
-		ResultSet rs =	pstm.executeQuery();
-		
-		return rs.rowDeleted();
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
 		return true;
 	}
 		
@@ -92,33 +64,7 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 		
 		String sql = "SELECT * FROM Departamento";
 		ArrayList<Department> departments = new ArrayList<Department>();
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				
-			ResultSet rs = pstm.executeQuery();
-				
-				while(rs.next()) {
-					
-					Department department = new Department();
-					Long dep_number = rs.getLong("Numero");
-					String name = rs.getString("Nome");
-					String centralOffice = rs.getString("EscritorioPrincipal");
-					Long profLeaderRegNumber = rs.getLong("MatLider");
-					ProfessorDAOImpl professorDAOImpl = new ProfessorDAOImpl();
-					Professor profLeader = professorDAOImpl.listByRegNumber(profLeaderRegNumber);
-					
-					department.setDep_number(dep_number);
-					department.setName(name);	
-					department.setCentralOffice(centralOffice);
-					if(profLeader.getReg_number() != null) {
-						department.setProfLeader(profLeader);						
-					}
-					departments.add(department);
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 		return departments;
 	}
 	
@@ -126,30 +72,7 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 		
 		String sql = "SELECT * FROM Departamento WHERE Numero = " + dep_number;
 		Department department = new Department();
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-			
-				ResultSet rs = pstm.executeQuery();
-				
-				if(rs.next()) {
-					
-					String name = rs.getString("Nome");
-					String centralOffice = rs.getString("EscritorioPrincipal");
-					Long profLeaderRegNumber = rs.getLong("MatLider");
-					ProfessorDAOImpl professorDAOImpl = new ProfessorDAOImpl();
-					Professor profLeader = professorDAOImpl.listByRegNumber(profLeaderRegNumber);
-					
-					department.setDep_number(dep_number);
-					department.setName(name);	
-					department.setCentralOffice(centralOffice);
-					if(profLeader.getReg_number() != null) {
-						department.setProfLeader(profLeader);						
-					}
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	
 		return department;
 	}
 }

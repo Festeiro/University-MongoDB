@@ -48,28 +48,12 @@ public class StudentDAOImpl implements StudentDAO{
 					+ " WHERE Matricula = " + student.getReg_number();
 		}
 		
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-			PreparedStatement pstm = connection.prepareStatement(sql)){
-			pstm.executeUpdate();
-     	   
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
 	public boolean delete(Long id) {
 		String sql = "DELETE FROM Estudante WHERE Matricula = " + id;
 
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-		PreparedStatement pstm = connection.prepareStatement(sql)){
-		ResultSet rs =	pstm.executeQuery();
-		
-		return rs.rowDeleted();
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		
 		return true;
 	}
@@ -78,38 +62,6 @@ public class StudentDAOImpl implements StudentDAO{
 	public ArrayList<Student> listAll(){
 		String sql = "SELECT * FROM Estudante";
 		ArrayList<Student> students = new ArrayList<Student>();
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				ResultSet rs = pstm.executeQuery();
-				
-				while(rs.next()) {
-					Student student = new Student();
-					Long reg_number = rs.getLong("Matricula");
-					String name = rs.getString("Nome");
-					int age = rs.getInt("Idade");
-					Long matAconselhador = rs.getLong("MatAconselhador");
-					Long numDepartamento = rs.getLong("NumDepartamento");
-					Student advisor = listByRegNumber(matAconselhador);
-					DepartmentDAOImpl departmentDAOImpl = new DepartmentDAOImpl();
-					Department department = departmentDAOImpl.listByDepNumber(numDepartamento);
-					
-					String course = rs.getString("TipoCurso");
-					student.setReg_number(reg_number);
-					student.setName(name);
-					student.setAge(age);
-					student.setCourse(course);
-					if(advisor.getReg_number() != null) {
-						student.setAdvisor(advisor);						
-					}
-					if(department.getDep_number() != null) {
-						student.setDepartment(department);
-					}
-					students.add(student);
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		return students;
 	}
 	
@@ -117,31 +69,6 @@ public class StudentDAOImpl implements StudentDAO{
 		
 		String sql = "SELECT * FROM Estudante WHERE matricula = " + reg_number;
 		Student student = new Student();
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-			
-				ResultSet rs = pstm.executeQuery();
-				
-				if(rs.next()) {
-					
-					String name = rs.getString("Nome");
-					int age = rs.getInt("Idade");
-					Long numDepartamento = rs.getLong("NumDepartamento");
-					DepartmentDAOImpl departmentDAOImpl = new DepartmentDAOImpl();
-					Department department = departmentDAOImpl.listByDepNumber(numDepartamento);
-					String course = rs.getString("TipoCurso");
-					student.setReg_number(reg_number);
-					student.setName(name);
-					student.setAge(age);
-					student.setCourse(course);
-					if(department.getDep_number() != null) {
-						student.setDepartment(department);
-					}
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		return student;
 	}
 }

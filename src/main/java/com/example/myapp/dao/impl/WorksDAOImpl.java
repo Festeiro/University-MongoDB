@@ -24,18 +24,6 @@ public class WorksDAOImpl implements WorksDAO{
 				+ " AND MatProfessor = " + works.getProfessor().getReg_number() ;
 		boolean exists = false;
 		
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				ResultSet rs = pstm.executeQuery();
-				
-				if(rs.next()) {
-					exists = true;
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
 		return exists;
 	}
 	
@@ -56,29 +44,12 @@ public class WorksDAOImpl implements WorksDAO{
 					+ " AND NumDepartamento = " + works.getDepartment().getDep_number();
 		}
 		
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-			PreparedStatement pstm = connection.prepareStatement(sql)){
-			pstm.executeUpdate();
-     	   
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	@Override
 	public boolean delete(Long professorRegNumber, Long departmentDepNumber) {
 		String sql = "DELETE FROM Trabalha WHERE MatProfessor = " + professorRegNumber + " AND NumDepartamento = " + departmentDepNumber;
 
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-		PreparedStatement pstm = connection.prepareStatement(sql)){
-		ResultSet rs =	pstm.executeQuery();
-		
-		return rs.rowDeleted();
-		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
 		return true;
 	}
 		
@@ -86,31 +57,6 @@ public class WorksDAOImpl implements WorksDAO{
 	public ArrayList<Works> listByProfessorRegNumber(Long professorRegNumber){
 		String sql = "SELECT * FROM Trabalha WHERE MatProfessor = " + professorRegNumber;
 		ArrayList<Works> workss = new ArrayList<Works>();
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				ResultSet rs = pstm.executeQuery();
-				
-				while(rs.next()) {
-					Works works = new Works();
-					double timePercentage = rs.getDouble("PercentagemTempo");
-					Long dep_number = rs.getLong("NumDepartamento");
-					
-					DepartmentDAOImpl departmentDAOImpl = new DepartmentDAOImpl();
-					Department department = departmentDAOImpl.listByDepNumber(dep_number);
-					
-					ProfessorDAOImpl professorDAOImpl = new ProfessorDAOImpl();
-					Professor professor = professorDAOImpl.listByRegNumber(professorRegNumber);
-					
-					works.setDepartment(department);
-					works.setProfessor(professor);
-					works.setTimePercentage(timePercentage);
-					
-					workss.add(works);
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		return workss;
 	}
 }

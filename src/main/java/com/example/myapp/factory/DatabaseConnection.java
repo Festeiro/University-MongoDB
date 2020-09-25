@@ -1,42 +1,33 @@
 package com.example.myapp.factory;
 
+import java.util.List;
+import java.util.Set;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
+import com.mongodb.DB;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 
 public class DatabaseConnection {
-
-   private static DatabaseConnection instance;
-   private Connection connection;
-   private String url = "jdbc:postgresql://localhost:5432/universidade";
-   private String username = "postgres";
-   private String password = "123";
-
-   private DatabaseConnection() throws SQLException {
-       try {
-           Class.forName("org.postgresql.Driver");
-           this.connection = DriverManager.getConnection(url, username, password);
-           if(this.connection != null) {
-        	   	System.out.println("Connected to PostgreSQL!");
-           }
-       } catch (ClassNotFoundException ex) {
-           System.out.println("Database Connection Creation Failed : " + ex.getMessage());
-       }
-   }
-
-   public Connection getConnection() {
-       return connection;
-   }
-
-   public static DatabaseConnection getInstance() throws SQLException {
-       if (instance == null) {
-           instance = new DatabaseConnection();
-       } else if (instance.getConnection().isClosed()) {
-           instance = new DatabaseConnection();
-       }
-
-       return instance;
-   }
+ 
+	public static void createConnection() {
+		MongoClient mongoClient = new MongoClient(new MongoClientURI("mongodb://127.0.0.1:27017"));
+		 
+		@SuppressWarnings("deprecation")
+		List<String> databases = mongoClient.getDatabaseNames();
+		 
+		for (String dbName : databases) {
+		    System.out.println("- Database: " + dbName);
+		     
+		    @SuppressWarnings("deprecation")
+			DB db = mongoClient.getDB(dbName);
+		     
+		    Set<String> collections = db.getCollectionNames();
+		    for (String colName : collections) {
+		        System.out.println("\t + Collection: " + colName);
+		    }
+		}
+		 
+		mongoClient.close();
+         
+    }
 }

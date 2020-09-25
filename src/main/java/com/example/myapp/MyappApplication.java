@@ -1,19 +1,18 @@
 package com.example.myapp;
 
-import java.sql.SQLException;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.example.myapp.factory.DatabaseConnection;
+
 @SpringBootApplication
 public class MyappApplication {
 
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args){
 		SpringApplication.run(MyappApplication.class, args);
 		
-		//test
-//		UserDAOImpl userDAO = new UserDAOImpl();
-//		userDAO.saveUser(22, "teste2");
+		DatabaseConnection.createConnection();
 	}
 
 }

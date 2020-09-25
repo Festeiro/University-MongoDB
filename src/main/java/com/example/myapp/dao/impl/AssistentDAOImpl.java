@@ -27,17 +27,6 @@ public class AssistentDAOImpl implements AssistentDAO{
 					+ " AND matsupervisor = " + assistent.getProfessor().getReg_number();
 		boolean exists = false;
 		
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				ResultSet rs = pstm.executeQuery();
-				
-				if(rs.next()) {
-					exists = true;
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		
 		return exists;
 	}
@@ -58,26 +47,13 @@ public class AssistentDAOImpl implements AssistentDAO{
 					+ " AND MatSupervisor = " + assistent.getProfessor().getReg_number();
 		}
 		
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				pstm.executeUpdate();
-	     	   
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		
 	}
 
 	@Override
 	public boolean delete(Long studentRegNumber) {
 		String sql = "DELETE FROM Assiste WHERE matEstudante = " + studentRegNumber;
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				ResultSet rs =	pstm.executeQuery();
-				return rs.rowDeleted();
-			
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		
 		return true;
 	}
 
@@ -85,25 +61,7 @@ public class AssistentDAOImpl implements AssistentDAO{
 	public ArrayList<Assistent> listByStudentRegNumber(Long studentRegNumber) {
 		String sql = "SELECT * FROM Assiste WHERE MatEstudante = " + studentRegNumber;
 		ArrayList<Assistent> assistentList = new ArrayList<Assistent>();
-		try(Connection connection = DatabaseConnection.getInstance().getConnection();
-				PreparedStatement pstm = connection.prepareStatement(sql)){
-				ResultSet rs = pstm.executeQuery();
-				
-				while(rs.next()) {
-					Assistent assistent = new Assistent();
-					Long projectNumber = rs.getLong("NumProjeto");
-										
-					Student student = studentDAO.listByRegNumber(studentRegNumber);									
-					Project project = projectDAO.listByProjectNumber(projectNumber);
-							
-					assistent.setProject(project);
-					assistent.setStudent(student);
-					assistentList.add(assistent);
-				}
-				
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 		return assistentList;
 	}
 
