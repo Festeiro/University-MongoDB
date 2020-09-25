@@ -7,6 +7,7 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 	$scope.projects = [{}];
 	$scope.assist = {};
 	$scope.assistents = [];
+	$scope.isUpdating = false;
 	
 	$scope.courses = [
 			'Computer Science',
@@ -18,12 +19,12 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 	];
 	
 	$scope.cols = [
-		{name: 'reg_number', widthInPercentage: '30' },
-		{name: 'name', widthInPercentage: '30' },
-		{name: 'age', widthInPercentage: '10' },
-		{name: 'course', widthInPercentage: '20' },
-		{name: 'advisorRegAndName', widthInPercentage: '20' },
-		{name: 'departmentDepAndName', widthInPercentage: '20' }
+		{name: 'reg_number', flex: '30', display: 'Matricula' },
+		{name: 'name', flex: '30', display: 'Nome' },
+		{name: 'age', flex: '10', display: 'Idade' },
+		{name: 'course', flex: '20', display: 'Curso' },
+		{name: 'advisorRegAndName', flex: '20', display: 'Aluno Aconselhador' },
+		{name: 'departmentDepAndName', flex: '20', display: 'Departamento' }
 	];
 	
 	$scope.listStudents = function(){
@@ -46,10 +47,15 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 	
 	$scope.listStudents();
 	
+	$scope.cancel = function(){
+		$scope.student = {};
+		$scope.isUpdating = false;
+	};
+	
 	$scope.save = function(){
 		StudentService.save($scope.student).then(function(response){
 			$scope.listStudents();
-			$scope.student = {};
+			$scope.cancel();
 		},function(http, status){
 			console.log()
 			$window.alert("n deu boa" + status);
@@ -82,7 +88,7 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 		$scope.projects = response.data;
 	})
 	
-	$scope.assistCols = [ {name: 'project_number', widthInPercentage: '20'} ];
+	$scope.assistCols = [ {name: 'project_number', flex: '20', display: 'Num. Projeto'} ];
 		
 	var resetAssist = function(){
 		$scope.assistent = { student: $scope.student,
