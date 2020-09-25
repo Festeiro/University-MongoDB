@@ -40,3 +40,7 @@ tr:nth-child(even) {
 .margins-divs {
     margin-right: 5px;
 }
+
+.form-fields div{
+	padding:2px;
+}

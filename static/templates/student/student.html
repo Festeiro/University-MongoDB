@@ -1,38 +1,73 @@
-<div ng-controller="StudentController">
+<div ng-controller="StudentController" flex="100" layout="column" style="width:100%">
 	
-	<label>Nome: </label><input type="text" ng-model="student.name"/><br>
-	<label>Idade: </label><input type="number" ng-model="student.age" class="input-sm spacing"/> <br>
-	<label>Curso: </label>
-	<select ng-model="student.course">
-		<option ng-repeat="course in courses" >{{course}}</option>
-	</select> <br>
-	<label>Aluno Aconselhador: </label>
-	<select ng-model="student.advisor"
-		ng-options="student as (student.reg_number + ' - ' + student.name) for student in students track by student.reg_number"></select> <br>
-	<label>Departamento: </label>
-	<select ng-model="student.department"
-		ng-options="department as (department.dep_number + ' - ' + department.name) for department in departments track by department.dep_number"></select>
-	<br><br>
-	<button ng-click="save()" class="btn btn-sm btn-info">Save</button><br>
-	
-	<div style="margin-top:5px">
-		<truers-grid items="students" cols="cols" on-update="update" on-delete="delete"></truers-grid>
-	</div>
-	
-	<div style="flex: 50">
-		<h2> {{assistent.student.name}} PARTICIPA DO PROJETO:</h2>
-	
-		<h4>Adicionar novo:</h4>
+	<div flex="100" layout="row" layout-align="center" class="form-fields">
 		
-		<label>Projeto: </label>
-		<select ng-model="assist.project"
-			ng-options="project as (project.projectNumber) for project in projects track by project.projectNumber"></select>
+		<div flex="70">
 		
-		<button ng-click="saveAssistent()" class="btn btn-sm btn-info">Save</button><br>
+			<div flex="80" style="border:1px solid black; border-radius: 5px; padding:10px">
+			
+				<h3>{{isUpdating ? 'Alterar' : 'Adicionar'}}</h3>
+				
+				<div flex="100" layout="row">
+					<label flex="25">Nome: </label><input flex="50" type="text" ng-model="student.name"/>
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Idade: </label><input flex="50" type="number" ng-model="student.age" class="input-sm spacing"/> 
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Curso: </label>
+					<select flex="50" ng-model="student.course">
+						<option ng-repeat="course in courses" >{{course}}</option>
+					</select> 
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Aluno Aconselhador: </label>
+					<select flex="50" ng-model="student.advisor"
+						ng-options="student as (student.reg_number + ' - ' + student.name) for student in students track by student.reg_number"></select> 
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Departamento: </label>
+					<select flex="50" ng-model="student.department"
+						ng-options="department as (department.dep_number + ' - ' + department.name) for department in departments track by department.dep_number"></select>
+					
+				</div>
+				<div flex="100" layout="row">
+					<button ng-click="cancel()" class="btn btn-danger" style="margin-right:3px">Cancelar</button>
+					<button ng-click="save()" class="btn btn-success">Confirmar</button>
+				</div>
+			</div>
+			
+			<div style="margin-top:5px">
+				<h3>Estudantes</h3>
+				<truers-grid items="students" cols="cols" on-update="update" on-delete="delete"></truers-grid>
+			</div>
+		</div>
 		
-		<div style="margin-top:5px">
-			<truers-grid items="assistents" cols="assistCols" on-delete="deleteAssist"></truers-grid>
-		</div>	
+		<div flex="30">
+			<h3> {{assistent.student.name}} PARTICIPA DO PROJETO</h3>
+		
+			<div flex="100" style="border:1px solid black; border-radius: 5px; padding:10px">
+				
+				<h4>Adicionar</h4>
+				
+				<div flex="100" layout="row" layout="center center">
+					<div flex="25"><label>Projeto: </label></div>
+					<div flex="50">
+						<select ng-disabled="!isUpdating" flex="100" style="min-width:100px"
+							ng-model="assist.project" ng-options="project as (project.projectNumber) for project in projects track by project.projectNumber">
+						</select>
+					</div>
+				</div>				
+				
+				<button ng-disabled="!isUpdating" ng-click="saveAssistent()" class="btn btn-sm btn-success">Confirmar</button>
+			</div>
+			
+			<div style="margin-top:5px">
+				<h3>Projetos</h3>
+				<truers-grid items="assistents" cols="assistCols" on-delete="deleteAssist"></truers-grid>
+			</div>	
+		</div>
+		
 	</div>
 	
 </div>
