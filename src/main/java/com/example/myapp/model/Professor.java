@@ -1,7 +1,10 @@
 package com.example.myapp.model;
 
+import org.bson.types.ObjectId;
+
 public class Professor{
 
+	private ObjectId id;
 	private Long reg_number;
 	private String name;
 	private Integer age;
@@ -18,6 +21,14 @@ public class Professor{
 	
 	public Professor() {
 		// TODO Auto-generated constructor stub
+	}
+
+	public ObjectId getId() {
+		return id;
+	}
+
+	public void setId(ObjectId id) {
+		this.id = id;
 	}
 
 	public String getName() {

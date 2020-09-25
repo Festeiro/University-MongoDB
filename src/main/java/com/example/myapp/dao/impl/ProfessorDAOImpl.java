@@ -6,39 +6,32 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.bson.Document;
+
 import com.example.myapp.dao.ProfessorDAO;
 import com.example.myapp.factory.DatabaseConnection;
 import com.example.myapp.model.Professor;
+import com.mongodb.client.MongoCollection;
 
 public class ProfessorDAOImpl implements ProfessorDAO{
 
+	private MongoCollection<Professor> collection;
+	
 	public ProfessorDAOImpl() {
+		collection = DatabaseConnection.getConnection().getCollection("Professor", Professor.class);
 	}
 	
 	@Override
 	public void save(Professor professor) {
 		
-		String sql = "";
-		if(professor.getReg_number() == null) {
-			sql = "INSERT INTO professor(Nome, Idade, Sala, Especialidade) VALUES('" + professor.getName() + "', " + 
-					professor.getAge() + ", '" + professor.getClassRoom() + "', '" + professor.getSpeciality() + "')";
-		}
-		else {
-			sql = "UPDATE professor"
-					+ " SET Nome = '" + professor.getName() + "'"
-					+ " , Idade = " + professor.getAge()
-					+ " , Sala = '" + professor.getClassRoom() + "'"
-					+ " , Especialidade = '" + professor.getSpeciality() + "'"
-					+ " WHERE Matricula = " + professor.getReg_number();
-		}
-		
+		collection.insertOne(professor);		
 	}
 
 	@Override
-	public boolean delete(Long id) {
-		String sql = "DELETE FROM professor WHERE Matricula = " + id;
-
-		return false;
+	public void delete(Professor professor) {
+		
+		Document filterByGradeId = new Document("_id", professor.getId());
+		collection.deleteOne(filterByGradeId);
 	}
 
 	@Override
