@@ -1,37 +1,61 @@
-<div ng-controller="ProfessorController">
+<div ng-controller="ProfessorController" flex="100" layout="column" style="width:100%">
 
-	<div style="display: flex; flex-direction: row; width:100%">
+	<div flex="100" layout="row" layout-align="center">
 	
-		<div style="flex: 50; margin-right: 5px">
-			<h2>PROFESSOR</h2>
-
-			<label>Nome: </label><input type="text" ng-model="professor.name"/><br>
-			<label>Idade: </label><input type="number" ng-model="professor.age" class="input-sm spacing"/> <br>
-			<label>Sala: </label><input type="text" ng-model="professor.classRoom" class="input-sm spacing"/> <br>
-			<label>Especialidade: </label><input type="text" ng-model="professor.speciality" class="input-sm spacing"/> <br>
-			<br><br>
-			<button ng-click="save()" class="btn btn-sm btn-info">Save</button><br>
+		<div flex="70">
+		
+			<div flex="80" class="form-fields">
 			
-			<div style="margin-top:5px">
+				<h3>{{isUpdating ? 'Alterar' : 'Adicionar'}}</h3>
+				
+				<div flex="100" layout="row">
+					<label flex="25">Nome: </label><input flex="50" type="text" ng-model="professor.name"/>
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Idade: </label><input flex="50" type="number" ng-model="professor.age"/> 
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Sala: </label><input flex="50" type="text" ng-model="professor.classRoom"/> 
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Especialidade: </label><input flex="50" type="text" ng-model="professor.speciality"/> 
+				</div>
+				
+				<div flex="100" layout="row">
+					<button ng-click="cancel()" class="btn btn-danger" style="margin-right:3px">Cancelar</button>
+					<button ng-click="save()" class="btn btn-success">Confirmar</button>
+				</div>
+			</div>
+			
+			<div flex="95" style="margin-top:5px">
+				<h3>Estudantes</h3>
 				<truers-grid items="profs" cols="cols" on-update="update" on-delete="delete"></truers-grid>
 			</div>
 		</div>
 		
-		<div style="flex: 50">
-			<h2> {{works.professor.name}} TRABALHA EM:</h2>
-		
-			<h4>Adicionar novo:</h4>
+		<div flex="30">
+			<h3> {{works.professor.name}} TRABALHA EM</h3>
 			
-			<label>Departamento: </label>
-			<select ng-model="works.department"
-				ng-options="department as (department.dep_number + ' - ' + department.name) for department in departments track by department.dep_number"></select>
+			<div flex="100" class="form-fields">
 			
-			<label>Percentagem de tempo:</label>
-			<input type="number" ng-model="works.timePercentage" class="input-sm spacing"/> <br>	
-			<br><br>
-			<button ng-click="saveWorks()" class="btn btn-sm btn-info">Save</button><br>
+				<h4>Adicionar / Alterar</h4>
+				
+				<div flex="100" layout="row">
+					<label flex="40">Departamento: </label>
+					<select flex="50" ng-model="works.department" ng-disabled="!isUpdating"
+						ng-options="department as (department.dep_number + ' - ' + department.name) for department in departments track by department.dep_number"></select>
+				</div>
+				
+				<div flex="100" layout="row">
+					<label flex="40">Percentagem de tempo:</label>
+					<input flex="50" ng-disabled="!isUpdating" type="number" ng-model="works.timePercentage"/> 	
+				</div>				
+				
+				<button ng-disabled="!isUpdating" ng-click="saveWorks()" class="btn btn-sm btn-success">Confirmar</button>
+			</div>
 			
 			<div style="margin-top:5px">
+				<h4>Trabalhos em</h4>
 				<truers-grid items="workss" cols="worksCols" on-delete="deleteWorks"></truers-grid>
 			</div>	
 		</div>

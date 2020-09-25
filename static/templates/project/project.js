@@ -4,14 +4,15 @@ module.controller('ProjectController', function($filter, $http, $scope, $window,
 	
 	$scope.projects = [{}];
 	$scope.project = {};
+	$scope.isUpdating = false;
 
 	$scope.cols = [
-		{name: 'projectNumber', widthInPercentage: '30' },
-		{name: 'financier', widthInPercentage: '30' },
-		{name: 'budget', widthInPercentage: '20'},
-		{name: 'startDate', widthInPercentage: '10', isDate: true },
-		{name: 'endDate', widthInPercentage: '20', isDate: true },
-		{name: 'profLeaderRegAndName', widthInPercentage: '10'}
+		{name: 'projectNumber', flex: '30', display: 'Numero' },
+		{name: 'financier', flex: '30', display: 'Financiador' },
+		{name: 'budget', flex: '20', display: 'Orcamento'},
+		{name: 'startDate', flex: '10', isDate: true, display: 'Dt. Inicial' },
+		{name: 'endDate', flex: '20', isDate: true, display: 'Dt. Final' },
+		{name: 'profLeaderRegAndName', flex: '10', display: 'Prof. Gerente'}
 	];
 	
 	$scope.listProjects = function(){
@@ -31,11 +32,16 @@ module.controller('ProjectController', function($filter, $http, $scope, $window,
 	
 	$scope.listProjects();
 	
+	$scope.cancel = function(){
+		$scope.projects = {};
+		$scope.isUpdating = false;
+	}
+	
 	$scope.save = function(){
 		
 		ProjectService.save($scope.project).then(function(response){			
 			$scope.listProjects();
-			$scope.projects = {};
+			$scope.cancel();
 		},function(http, status){
 			console.log()
 			$window.alert("n deu boa" + status);
@@ -44,6 +50,7 @@ module.controller('ProjectController', function($filter, $http, $scope, $window,
 	
 	$scope.update = function(project){
 		
+		$scope.isUpdating = true;
 		$scope.project = angular.copy(project);
 		resetParticipates();
 		$scope.listParticipates();
@@ -70,7 +77,7 @@ module.controller('ProjectController', function($filter, $http, $scope, $window,
 	$scope.participates = {};
 	
 	$scope.participatesCols = [
-		{name: 'professorRegAndName', widthInPercentage: '20' },
+		{name: 'professorRegAndName', flex: '20', display: 'Reg. Professor' },
 	];
 	
 	var resetParticipates = function(){

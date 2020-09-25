@@ -1,10 +1,10 @@
 <div ng-controller="StudentController" flex="100" layout="column" style="width:100%">
 	
-	<div flex="100" layout="row" layout-align="center" class="form-fields">
+	<div flex="100" layout="row" layout-align="center">
 		
 		<div flex="70">
 		
-			<div flex="80" style="border:1px solid black; border-radius: 5px; padding:10px">
+			<div flex="80" class="form-fields">
 			
 				<h3>{{isUpdating ? 'Alterar' : 'Adicionar'}}</h3>
 				
@@ -12,7 +12,7 @@
 					<label flex="25">Nome: </label><input flex="50" type="text" ng-model="student.name"/>
 				</div>
 				<div flex="100" layout="row">
-					<label flex="25">Idade: </label><input flex="50" type="number" ng-model="student.age" class="input-sm spacing"/> 
+					<label flex="25">Idade: </label><input flex="50" type="number" ng-model="student.age"/> 
 				</div>
 				<div flex="100" layout="row">
 					<label flex="25">Curso: </label>
@@ -37,7 +37,7 @@
 				</div>
 			</div>
 			
-			<div style="margin-top:5px">
+			<div flex="95" style="margin-top:5px">
 				<h3>Estudantes</h3>
 				<truers-grid items="students" cols="cols" on-update="update" on-delete="delete"></truers-grid>
 			</div>
@@ -46,7 +46,7 @@
 		<div flex="30">
 			<h3> {{assistent.student.name}} PARTICIPA DO PROJETO</h3>
 		
-			<div flex="100" style="border:1px solid black; border-radius: 5px; padding:10px">
+			<div flex="100" class="form-fields">
 				
 				<h4>Adicionar</h4>
 				
@@ -62,7 +62,7 @@
 				<button ng-disabled="!isUpdating" ng-click="saveAssistent()" class="btn btn-sm btn-success">Confirmar</button>
 			</div>
 			
-			<div style="margin-top:5px">
+			<div flex="100" style="margin-top:5px">
 				<h3>Projetos</h3>
 				<truers-grid items="assistents" cols="assistCols" on-delete="deleteAssist"></truers-grid>
 			</div>	

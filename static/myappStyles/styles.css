@@ -41,6 +41,13 @@ tr:nth-child(even) {
     margin-right: 5px;
 }
 
-.form-fields div{
-	padding:2px;
+.form-fields{
+	border:1px solid black;
+	border-radius: 5px;
+	padding:10px
 }
+
+.form-fields div{
+	padding:4px;
+}
+

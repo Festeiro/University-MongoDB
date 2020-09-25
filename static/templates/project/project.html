@@ -1,38 +1,65 @@
-<div ng-controller="ProjectController">
+<div ng-controller="ProjectController" flex="100" layout="column" style="width:100%">
 
-	<div style="display: flex; flex-direction: row; width:100%">
+	<div flex="100" layout="row" layout-align="center">
 	
-		<div style="flex: 50; margin-right: 5px">
-			<label>Numero: </label><input type="number" ng-model="project.projectNumber"/><br>
-			<label>Financiador: </label><input type="text" ng-model="project.financier" class="input-sm spacing"/> <br>
-			<label>Orcamento: </label><input type="number" step="0.01" min="0" ng-model="project.budget" class="input-sm spacing"/> <br>
-			<label>Data Inicial: </label><input type="date" dateformat="dd/MM/yyyy" ng-model="project.startDate" class="input-sm spacing"/> <br>
-			<label>Data Final: </label><input type="date" ng-model="project.endDate" class="input-sm spacing"/> <br>
-			<label>Professor Gerente: </label>
-			<select ng-model="project.profLeader"
-				ng-options="professor as professor.name for professor in professors track by professor.reg_number"></select>
-			<br><br>
-			<button ng-click="save()" class="btn btn-sm btn-info">Save</button><br>
+		<div flex="70">
+		
+			<div flex="80" class="form-fields">
+				
+				<h3>{{isUpdating ? 'Alterar' : 'Adicionar'}}</h3>
+	
+				<div flex="100" layout="row">
+					<label flex="25">Numero: </label><input flex="50" type="number" ng-model="project.projectNumber"/>
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Financiador: </label><input flex="50" type="text" ng-model="project.financier" /> 
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Orcamento: </label><input flex="50" type="number" step="0.01" min="0" ng-model="project.budget" /> 
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Data Inicial: </label><input flex="50" type="date" dateformat="dd/MM/yyyy" ng-model="project.startDate" /> 
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Data Final: </label><input flex="50" type="date" ng-model="project.endDate" /> 
+				</div>
+				<div flex="100" layout="row">
+					<label flex="25">Professor Gerente: </label>
+					<select flex="50" ng-model="project.profLeader"
+						ng-options="professor as professor.name for professor in professors track by professor.reg_number"></select>
+				</div>
+				
+				<div flex="100" layout="row">
+					<button ng-click="cancel()" class="btn btn-danger" style="margin-right:3px">Cancelar</button>
+					<button ng-click="save()" class="btn btn-success">Confirmar</button>
+				</div>
+				
+			</div>
 			
-			<div style="margin-top:5px">
+			<div flex="95" style="margin-top:5px">
+				<h3>Projetos</h3>
 				<truers-grid items="projects" cols="cols" on-update="update" on-delete="delete"></truers-grid>
 			</div>
 		</div>
 		
-		<div style="flex: 50; margin-right: 5px">
+		<div flex="30">
 		
-			<h2> PROFESSORES PARTICIPANTES DO PROJETO {{participates.project.projectNumber}}:</h2>
+			<h3> PROFESSORES PARTICIPANTES DO PROJETO</h3>
 		
-			<h4>Adicionar novo:</h4>
-			
-			<label>Professor: </label>
-			<select ng-model="participates.professor"
-				ng-options="professor as (professor.reg_number + ' - ' + professor.name) for professor in professors track by professor.reg_number"></select>
-			<br><br>
-			
-			<button ng-click="saveParticipates()" class="btn btn-sm btn-info">Save</button><br>
+			<div flex="100" class="form-fields">
+				<h4>Adicionar</h4>
+				
+				<div flex="100" layout="row">
+					<label flex="25">Professor: </label>
+					<select ng-disabled="!isUpdating" flex="50" ng-model="participates.professor"
+						ng-options="professor as (professor.reg_number + ' - ' + professor.name) for professor in professors track by professor.reg_number"></select>
+				</div>
+							
+				<button ng-disabled="!isUpdating" ng-click="saveParticipates()" class="btn btn-sm btn-success">Confirmar</button>
+			</div>
 			
 			<div style="margin-top:5px">
+				<h4>Professores</h4>
 				<truers-grid items="participatess" cols="participatesCols" on-delete="deleteParticipates"></truers-grid>
 			</div>	
 		

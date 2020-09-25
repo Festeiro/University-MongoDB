@@ -64,6 +64,7 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 	
 	$scope.update = function(student){
 		
+		$scope.isUpdating = true;
 		$scope.student = angular.copy(student);
 		resetAssist();
 		$scope.listAssist();

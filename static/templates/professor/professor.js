@@ -4,13 +4,14 @@ module.controller('ProfessorController', function($http, $scope, $window, Profes
 	
 	$scope.profs = [{}];
 	$scope.professor = {};
+	$scope.isUpdating = false;
 
 	$scope.cols = [
-		{name: 'reg_number', widthInPercentage: '30' },
-		{name: 'name', widthInPercentage: '30' },
-		{name: 'age', widthInPercentage: '10' },
-		{name: 'speciality', widthInPercentage: '20' },
-		{name: 'classRoom', widthInPercentage: '20' }
+		{name: 'reg_number', flex: '30', display: 'Registro' },
+		{name: 'name', flex: '30', display: 'Nome' },
+		{name: 'age', flex: '10', display: 'Idade' },
+		{name: 'speciality', flex: '20', display: 'Especialidade' },
+		{name: 'classRoom', flex: '20', display: 'Sala' }
 	];
 	
 	$scope.listProfs = function(){
@@ -29,11 +30,16 @@ module.controller('ProfessorController', function($http, $scope, $window, Profes
 		$scope.workss = [];
 	};
 	
+	$scope.cancel = function(){
+		resetProfessor();
+		$scope.isUpdating = false;
+	};
+	
 	$scope.save = function(){
 		
 		ProfessorService.save($scope.professor).then(function(response){			
 			$scope.listProfs();
-			resetProfessor();
+			$scope.cancel();
 		},function(http, status){
 			console.log()
 			$window.alert("n deu boa" + status);
@@ -42,6 +48,7 @@ module.controller('ProfessorController', function($http, $scope, $window, Profes
 	
 	$scope.update = function(professor){
 		
+		$scope.isUpdating = true;
 		$scope.professor = angular.copy(professor);
 		resetWorks();
 		$scope.listWorks();
@@ -69,8 +76,8 @@ module.controller('ProfessorController', function($http, $scope, $window, Profes
 	$scope.works = {};
 	
 	$scope.worksCols = [
-		{name: 'departmentDepAndName', widthInPercentage: '20' },
-		{name: 'timePercentage', widthInPercentage: '20' },
+		{name: 'departmentDepAndName', flex: '20', display: 'Departamento' },
+		{name: 'timePercentage', flex: '20', display: 'Tempo (%)' },
 	];
 	
 	var resetWorks = function(){

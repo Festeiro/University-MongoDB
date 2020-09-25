@@ -1,15 +1,32 @@
-<div ng-controller="DepartmentController">
+<div ng-controller="DepartmentController" flex="100" layout="column" style="width:100%">
 	
-	<label>Numero: </label><input type="number" ng-model="department.dep_number"/><br>
-	<label>Nome: </label><input type="text" ng-model="department.name" class="input-sm spacing"/> <br>
-	<label>Escritorio Principal: </label><input type="text" ng-model="department.centralOffice"/><br>
-	<label>Professor Lider: </label>
-	<select ng-model="department.profLeader"
-		ng-options="professor as (professor.reg_number + ' - ' + professor.name) for professor in professors track by professor.reg_number"></select>
-	<br><br>
-	<button ng-click="save()" class="btn btn-sm btn-info">Save</button><br>
+	<div flex="100" class="form-fields" style="width:80%">
+		<h3>{{isUpdating ? 'Alterar' : 'Adicionar'}}</h3>
+					
+		<div flex="100" layout="row">
+			<label flex="25">Numero: </label><input flex="50" type="number" ng-model="department.dep_number"/>
+		</div>
+		<div flex="100" layout="row">
+			<label flex="25">Nome: </label><input flex="50" type="text" ng-model="department.name"/> 
+		</div>
+		<div flex="100" layout="row">
+			<label flex="25">Escritorio Principal: </label><input flex="50" type="text" ng-model="department.centralOffice"/>
+		</div>
+		<div flex="100" layout="row">
+			<label flex="25">Professor Lider: </label>
+			<select flex="50" ng-model="department.profLeader"
+				ng-options="professor as (professor.reg_number + ' - ' + professor.name) for professor in professors track by professor.reg_number">
+			</select>
+		</div>
+			
+		<div flex="100" layout="row">
+			<button ng-click="cancel()" class="btn btn-danger" style="margin-right:3px">Cancelar</button>
+			<button ng-click="save()" class="btn btn-success">Confirmar</button>
+		</div>
+	</div>
 	
 	<div style="margin-top:5px">
+		<h3>Departamentos</h3>
 		<truers-grid items="departments" cols="cols" on-update="update" on-delete="delete"></truers-grid>
 	</div>
 	
