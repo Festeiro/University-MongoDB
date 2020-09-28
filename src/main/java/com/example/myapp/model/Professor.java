@@ -5,14 +5,14 @@ import org.bson.types.ObjectId;
 public class Professor{
 
 	private ObjectId id;
-	private Long reg_number;
+	private String reg_number;
 	private String name;
 	private Integer age;
 	private String speciality;
 	private String classRoom;
 
 
-	public Professor(String name, Integer age, String userType, String speciality, String classRoom) {
+	public Professor(String name, Integer age, String speciality, String classRoom) {
 		this.name = name;
 		this.age = age;
 		this.speciality = speciality;
@@ -59,11 +59,11 @@ public class Professor{
 		this.speciality = speciality;
 	}
 	
-	public Long getReg_number() {
+	public String getReg_number() {
 		return reg_number;
 	}
 
-	public void setReg_number(Long reg_number) {
+	public void setReg_number(String reg_number) {
 		this.reg_number = reg_number;
 	}
 

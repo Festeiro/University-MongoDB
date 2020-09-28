@@ -8,7 +8,7 @@ public interface DepartmentDAO {
 
 	public void save(Department department);
 	
-	public boolean delete(Long id);
+	public boolean delete(String id);
 		
 	public ArrayList<Department> listAll();	
 }

@@ -8,7 +8,7 @@ public interface ProfessorDAO {
 
 	public void save(Professor professor);
 
-	public void delete(Professor professor);
+	public void delete(String id);
 
 	public ArrayList<Professor> listAll();
 

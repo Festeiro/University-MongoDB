@@ -31,7 +31,7 @@ public class ProfessorController {
 	}
 	
 	@DeleteMapping(path="/delete")
-	public void delete(@RequestBody Professor professor) {
+	public void delete(@RequestParam String professor) {
 	
 		profDAO.delete(professor);
 	}
