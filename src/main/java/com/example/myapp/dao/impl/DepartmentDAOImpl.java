@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.example.myapp.dao.DepartmentDAO;
 import com.example.myapp.factory.DatabaseConnection;
 import com.example.myapp.model.Department;
+import com.example.myapp.model.Student;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -14,10 +15,11 @@ import com.mongodb.client.MongoCursor;
 public class DepartmentDAOImpl implements DepartmentDAO{
 	
 	private MongoCollection<Department> collection;
-
+	private MongoCollection<Student> studCollection;
+	
 	public DepartmentDAOImpl() {
 		collection = DatabaseConnection.getConnection().getCollection("departamento", Department.class);
-		
+		studCollection = DatabaseConnection.getConnection().getCollection("estudante", Student.class);
 	}
 	
 	private boolean exists(Department department) {
@@ -42,8 +44,13 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 	@Override
 	public boolean delete(Long id) {
 		
-		collection.deleteOne(eq("dep_number", id));
-		return true;
+		Student student = studCollection.find(eq("department.dep_number", id)).first();
+		if(student == null) {
+			collection.deleteOne(eq("dep_number", id));
+			return true;
+		}
+		
+		return false;
 	}
 		
 	@Override
@@ -64,7 +71,6 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 	
 	public Department listByDepNumber(Long dep_number){
 		
-		String sql = "SELECT * FROM Departamento WHERE Numero = " + dep_number;
 		Department department = new Department();
 	
 		return department;
