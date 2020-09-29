@@ -77,6 +77,7 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 			if(response.data == false){
 				$window.alert("Existe alguma relacao" + status);
 			}
+			$scope.cancel();
 		},function(http, status){
 			console.log()
 			$window.alert("n deu boa" + status);

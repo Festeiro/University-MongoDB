@@ -33,7 +33,7 @@ module.controller('ProjectController', function($filter, $http, $scope, $window,
 	$scope.listProjects();
 	
 	$scope.cancel = function(){
-		$scope.projects = {};
+		$scope.project = {};
 		$scope.isUpdating = false;
 	}
 	
@@ -63,6 +63,7 @@ module.controller('ProjectController', function($filter, $http, $scope, $window,
 			if(response.data == false){
 				$window.alert("Existe alguma relacao" + status);
 			}
+			$scope.cancel();
 		},function(http, status){
 			$window.alert("n deu boa" + status);
 		});
