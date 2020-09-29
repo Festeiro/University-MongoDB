@@ -1,30 +1,31 @@
 package com.example.myapp.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
+
 import java.util.ArrayList;
 
 import com.example.myapp.dao.WorksDAO;
 import com.example.myapp.factory.DatabaseConnection;
-import com.example.myapp.model.Department;
-import com.example.myapp.model.Professor;
 import com.example.myapp.model.Works;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 
 public class WorksDAOImpl implements WorksDAO{
 
+	private MongoCollection<Works> collection;
+	
 	public WorksDAOImpl() {
-		// TODO Auto-generated constructor stub
+		collection = DatabaseConnection.getConnection().getCollection("trabalha", Works.class);
 	}
 	
 	private boolean exists(Works works) {
 		
-		String sql = "SELECT * FROM Trabalha WHERE NumDepartamento = " + works.getDepartment().getDep_number()
-				+ " AND MatProfessor = " + works.getProfessor().getReg_number() ;
-		boolean exists = false;
+		Works foundWorks = collection.find(and(eq("department.dep_number", works.getDepartment().getDep_number()), 
+				eq("professor.reg_number", works.getProfessor().getReg_number()))).first();
 		
-		return exists;
+		return foundWorks != null;
 	}
 	
 	@Override
@@ -34,29 +35,31 @@ public class WorksDAOImpl implements WorksDAO{
 		boolean isUpdate = exists(works);
 		
 		if(!isUpdate) {
-			sql = "INSERT INTO Trabalha (MatProfessor, NumDepartamento, PercentagemTempo)"
-					+ " VALUES( " + works.getProfessor().getReg_number() + ", " + works.getDepartment().getDep_number() + ", " + works.getTimePercentage() + " )";
-		}
-		else {
-			sql = "UPDATE Trabalha"
-					+ " SET PercentagemTempo = " + works.getTimePercentage()
-					+ " WHERE MatProfessor = " + works.getProfessor().getReg_number()
-					+ " AND NumDepartamento = " + works.getDepartment().getDep_number();
+			collection.insertOne(works);			
+		}else {
+			collection.findOneAndReplace(and(eq("department.dep_number", works.getDepartment().getDep_number()), 
+					eq("professor.reg_number", works.getProfessor().getReg_number())), works);
 		}
 		
 	}
 	
 	@Override
-	public boolean delete(Long professorRegNumber, Long departmentDepNumber) {
-		String sql = "DELETE FROM Trabalha WHERE MatProfessor = " + professorRegNumber + " AND NumDepartamento = " + departmentDepNumber;
-
+	public boolean delete(Long professorRegNumber, Long worksDepNumber) {
+		collection.deleteOne(and(eq("department.dep_number", worksDepNumber), 
+				eq("professor.reg_number", professorRegNumber)));
 		return true;
 	}
 		
 	@Override
 	public ArrayList<Works> listByProfessorRegNumber(Long professorRegNumber){
-		String sql = "SELECT * FROM Trabalha WHERE MatProfessor = " + professorRegNumber;
 		ArrayList<Works> workss = new ArrayList<Works>();
+		FindIterable<Works> findIterable = collection.find();
+		MongoCursor<Works> cursor = findIterable.iterator();
+		
+		while(cursor.hasNext()) {
+			workss.add(cursor.next());
+		}
+		
 		return workss;
 	}
 }
