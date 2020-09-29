@@ -50,9 +50,12 @@ public class ProjectDAOImpl implements ProjectDAO{
 		ArrayList<Project> projects = new ArrayList<Project>();
 		FindIterable<Project> findIterable = collection.find();
 		MongoCursor<Project> cursor = findIterable.iterator();
-		
-		while(cursor.hasNext()) {
-			projects.add(cursor.next());
+		try {
+			while(cursor.hasNext()) {
+				projects.add(cursor.next());
+			}
+		} finally {
+			cursor.close();
 		}
 		return projects;
 	}

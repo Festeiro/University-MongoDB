@@ -17,6 +17,7 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 
 	public DepartmentDAOImpl() {
 		collection = DatabaseConnection.getConnection().getCollection("departamento", Department.class);
+		
 	}
 	
 	private boolean exists(Department department) {
@@ -40,6 +41,7 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 	
 	@Override
 	public boolean delete(Long id) {
+		
 		collection.deleteOne(eq("dep_number", id));
 		return true;
 	}
@@ -50,10 +52,13 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 		FindIterable<Department> findIterable = collection.find();
 		MongoCursor<Department> cursor = findIterable.iterator();
 		
-		while(cursor.hasNext()) {
-			departments.add(cursor.next());
+		try {
+			while(cursor.hasNext()) {
+				departments.add(cursor.next());
+			}
+		} finally {
+			cursor.close();
 		}
-		
 		return departments;
 	}
 	

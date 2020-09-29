@@ -55,10 +55,13 @@ public class ParticipatesDAOImpl implements ParticipatesDAO{
 		FindIterable<Participates> findIterable = collection.find();
 		MongoCursor<Participates> cursor = findIterable.iterator();
 		
-		while(cursor.hasNext()) {
-			participatess.add(cursor.next());
+		try {
+			while(cursor.hasNext()) {
+				participatess.add(cursor.next());
+			}
+		} finally {
+			cursor.close();
 		}
-		
 		return participatess;
 	}
 }

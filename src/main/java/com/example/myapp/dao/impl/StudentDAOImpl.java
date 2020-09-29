@@ -68,8 +68,12 @@ public class StudentDAOImpl implements StudentDAO{
 		FindIterable<Student> findIterable = collection.find();
 		MongoCursor<Student> cursor = findIterable.iterator();
 		
-		while(cursor.hasNext()) {
-			students.add(cursor.next());
+		try {
+			while(cursor.hasNext()) {
+				students.add(cursor.next());
+			}
+		} finally {
+			cursor.close();
 		}
 		return students;
 	}

@@ -69,10 +69,13 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 		FindIterable<Professor> findIterable = collection.find();
 		MongoCursor<Professor> cursor = findIterable.iterator();
 		
-		while(cursor.hasNext()) {
-			professors.add(cursor.next());
+		try {
+			while(cursor.hasNext()) {
+				professors.add(cursor.next());
+			}
+		} finally {
+			cursor.close();
 		}
-		
 		return professors;
 	}
 	

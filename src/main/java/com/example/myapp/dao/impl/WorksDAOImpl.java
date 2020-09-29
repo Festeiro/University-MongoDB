@@ -55,10 +55,13 @@ public class WorksDAOImpl implements WorksDAO{
 		FindIterable<Works> findIterable = collection.find();
 		MongoCursor<Works> cursor = findIterable.iterator();
 		
-		while(cursor.hasNext()) {
-			workss.add(cursor.next());
+		try {
+				while(cursor.hasNext()) {
+				workss.add(cursor.next());
+			}
+		} finally {
+			cursor.close();
 		}
-		
 		return workss;
 	}
 }

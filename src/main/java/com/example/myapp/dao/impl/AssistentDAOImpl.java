@@ -59,11 +59,14 @@ public class AssistentDAOImpl implements AssistentDAO{
 		ArrayList<Assistent> assists = new ArrayList<Assistent>();
 		FindIterable<Assistent> findIterable = collection.find();
 		MongoCursor<Assistent> cursor = findIterable.iterator();
-		
-		while(cursor.hasNext()) {
-			assists.add(cursor.next());
+		try {
+	
+			while(cursor.hasNext()) {
+				assists.add(cursor.next());
+			}
+		} finally {
+			cursor.close();
 		}
-		
 		return assists;
 	}
 
