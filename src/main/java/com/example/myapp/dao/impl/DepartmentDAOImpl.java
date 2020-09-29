@@ -1,16 +1,12 @@
 package com.example.myapp.dao.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.mongodb.client.model.Filters.eq;
 
-import org.bson.Document;
-import org.bson.types.ObjectId;
+import java.util.ArrayList;
 
 import com.example.myapp.dao.DepartmentDAO;
 import com.example.myapp.factory.DatabaseConnection;
 import com.example.myapp.model.Department;
-import com.example.myapp.model.Professor;
-import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -24,21 +20,27 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 	}
 	
 	private boolean exists(Department department) {
-		boolean exists = false;
-		return exists;
+		
+		Department foundDepartment = collection.find(eq("dep_number", department.getDep_number())).first();
+		
+		return foundDepartment != null;
 	}
 	
 	@Override
 	public void save(Department department) {
+		
 		boolean isUpdate = exists(department);
 		
-		collection.insertOne(department);
+		if(!isUpdate) {
+			collection.insertOne(department);			
+		}else {
+			collection.findOneAndReplace(eq("dep_number", department.getDep_number()), department);
+		}
 	}
 	
 	@Override
-	public boolean delete(String id) {
-		collection.deleteOne(new Document("numero", new ObjectId(id)));
-
+	public boolean delete(Long id) {
+		collection.deleteOne(eq("dep_number", id));
 		return true;
 	}
 		
