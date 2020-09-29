@@ -21,7 +21,7 @@
 			
 		<div flex="100" layout="row">
 			<button ng-click="cancel()" class="btn btn-danger" style="margin-right:3px">Cancelar</button>
-			<button ng-click="save()" class="btn btn-success">Confirmar</button>
+			<button ng-click="save()" ng-disabled="!department.dep_number" class="btn btn-success">Confirmar</button>
 		</div>
 	</div>
 	
