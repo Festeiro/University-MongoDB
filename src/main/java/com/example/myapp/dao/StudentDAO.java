@@ -8,7 +8,7 @@ public interface StudentDAO {
 
 	public void save(Student student);
 	
-	public boolean delete(String id);
+	public boolean delete(Long id);
 	
 	public ArrayList<Student> listAll();
 	
