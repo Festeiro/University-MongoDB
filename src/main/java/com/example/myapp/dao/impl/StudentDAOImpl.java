@@ -1,67 +1,46 @@
 package com.example.myapp.dao.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+
+import org.bson.Document;
+import org.bson.types.ObjectId;
 
 import com.example.myapp.dao.StudentDAO;
 import com.example.myapp.factory.DatabaseConnection;
-import com.example.myapp.model.Department;
 import com.example.myapp.model.Student;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 
 public class StudentDAOImpl implements StudentDAO{
 
+	private MongoCollection<Student> collection;
+	
 	public StudentDAOImpl() {
-		// TODO Auto-generated constructor stub
+		collection = DatabaseConnection.getConnection().getCollection("estudante", Student.class);
 	}
 	
 	@Override
 	public void save(Student student) {
 		
-		String sql = "";
-		Long matAconselhador = null;
-		Long numDepartamento = null;
-		
-		if(student.getAdvisor() != null) {
-			matAconselhador = student.getAdvisor().getReg_number();
-		}
-		
-		if(student.getDepartment() != null) {
-			numDepartamento = student.getDepartment().getDep_number();
-		}
-		
-		
-		if(student.getReg_number() == null) {
-			sql = "INSERT INTO Estudante (Nome, Idade, TipoCurso, MatAconselhador, NumDepartamento)"
-					+ " VALUES('" + student.getName() + "', " + student.getAge() + ", '" + student.getCourse() + "'"
-							+ ", " + matAconselhador + ", " + numDepartamento + ")";
-		}
-		else {
-			sql = "UPDATE Estudante"
-					+ " SET Nome = '" + student.getName() + "'"
-					+ " , Idade = " + student.getAge()
-					+ " , TipoCurso = '" + student.getCourse() + "'"
-					+ " , MatAconselhador = " + matAconselhador
-					+ " , NumDepartamento = " + numDepartamento
-					+ " WHERE Matricula = " + student.getReg_number();
-		}
-		
+		collection.insertOne(student);
 	}
 	
 	@Override
-	public boolean delete(Long id) {
-		String sql = "DELETE FROM Estudante WHERE Matricula = " + id;
-
-		
+	public boolean delete(String id) {
+		collection.deleteOne(new Document("_id", new ObjectId(id)));
 		return true;
 	}
 		
 	@Override
 	public ArrayList<Student> listAll(){
-		String sql = "SELECT * FROM Estudante";
 		ArrayList<Student> students = new ArrayList<Student>();
+		FindIterable<Student> findIterable = collection.find();
+		MongoCursor<Student> cursor = findIterable.iterator();
+		
+		while(cursor.hasNext()) {
+			students.add(cursor.next());
+		}
 		return students;
 	}
 	

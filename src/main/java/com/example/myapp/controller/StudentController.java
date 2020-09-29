@@ -24,14 +24,13 @@ public class StudentController {
 
 	@PostMapping(path="/save")
 	public boolean save(@RequestBody Student student) {
-		//TODO: check if this new user already exists
 		
 		studentDAO.save(student);
 		return true;
 	}
 	
 	@DeleteMapping(path="/delete")
-	public boolean delete(@RequestParam Long id) {
+	public boolean delete(@RequestParam String id) {
 	
 		studentDAO.delete(id);
 		return false;

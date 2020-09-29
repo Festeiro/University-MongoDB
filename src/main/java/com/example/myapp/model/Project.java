@@ -2,18 +2,20 @@ package com.example.myapp.model;
 
 import java.sql.Timestamp;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Project {
 
 	private Long projectNumber;
 	private String financier;
 	private float budget;
-	private Timestamp startDate;
-	private Timestamp endDate;
+	private String startDate;
+	private String endDate;
 	private Professor profLeader;
 	
 
 
-	public Project(Long projectNumber, String financier, Timestamp startDate, Timestamp endDate, float budget, Professor profLeader) {
+	public Project(Long projectNumber, String financier, String startDate, String endDate, float budget, Professor profLeader) {
 		this.projectNumber = projectNumber;
 		this.financier = financier;
 		this.budget = budget;
@@ -54,19 +56,19 @@ public class Project {
 		this.financier = financier;
 	}
 
-	public Timestamp getStartDate() {
+	public String getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Timestamp startDate) {
+	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
 
-	public Timestamp getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Timestamp endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 
