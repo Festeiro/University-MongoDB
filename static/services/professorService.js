@@ -15,14 +15,12 @@ module.service('ProfessorService', function($http) {
 		return $http.get('/professor/list', {});
 	};
 	
-	this.delete = function(professor){
+	this.delete = function(id){
 		
 		return $http({
-			method: 'DELETE',
+			method: 'POST',
 			url: "http://localhost:8080/professor/delete",
-			params:{
-				professor: professor
-			}
+			data: id
 		});
 	};
 });

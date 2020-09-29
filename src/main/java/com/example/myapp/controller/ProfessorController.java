@@ -2,12 +2,11 @@ package com.example.myapp.controller;
 
 import java.util.ArrayList;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.myapp.dao.impl.ProfessorDAOImpl;
@@ -22,7 +21,6 @@ public class ProfessorController {
 
 	ProfessorDAOImpl profDAO = new ProfessorDAOImpl();
 
-
 	@PostMapping(path="/save")
 	public boolean save(@RequestBody Professor professor) {
 		
@@ -30,10 +28,10 @@ public class ProfessorController {
 		return true;
 	}
 	
-	@DeleteMapping(path="/delete")
-	public void delete(@RequestParam String professor) {
+	@PostMapping(path="/delete")
+	public void delete(@RequestBody ObjectId id) {
 	
-		profDAO.delete(professor);
+		profDAO.delete(id);
 	}
 	
 	@GetMapping(path="/list")

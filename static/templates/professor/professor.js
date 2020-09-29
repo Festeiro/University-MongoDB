@@ -7,7 +7,7 @@ module.controller('ProfessorController', function($http, $scope, $window, Profes
 	$scope.isUpdating = false;
 
 	$scope.cols = [
-		{name: 'reg_number', flex: '30', display: 'Registro' },
+		{name: 'reg_number', flex: '30', display: 'Matricula' },
 		{name: 'name', flex: '30', display: 'Nome' },
 		{name: 'age', flex: '10', display: 'Idade' },
 		{name: 'speciality', flex: '20', display: 'Especialidade' },
@@ -55,7 +55,7 @@ module.controller('ProfessorController', function($http, $scope, $window, Profes
 	};
 	
 	$scope.delete = function(professor){
-		
+
 		ProfessorService.delete(professor.reg_number).then(function(response){			
 			$scope.listProfs();
 		},function(http, status){

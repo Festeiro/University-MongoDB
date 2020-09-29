@@ -4,7 +4,6 @@ import static com.mongodb.client.model.Filters.eq;
 
 import java.util.ArrayList;
 
-import org.bson.Document;
 import org.bson.types.ObjectId;
 
 import com.example.myapp.dao.ProfessorDAO;
@@ -24,14 +23,12 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 	
 	@Override
 	public void save(Professor professor) {
-		
-		collection.insertOne(professor);
-		
+		collection.insertOne(professor);	
 	}
 
 	@Override
-	public void delete(String id) {
-		collection.deleteOne(new Document("_id", new ObjectId(id)));
+	public void delete(ObjectId id) {
+		collection.deleteOne(eq("_id", id));
 	}
 
 	@Override
@@ -49,7 +46,6 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 	}
 	
 	public Professor listByRegNumber(Long reg_number){
-		
 		return collection.find(eq("reg_number", reg_number)).first();
 	}
 }
