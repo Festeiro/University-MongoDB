@@ -62,10 +62,15 @@ public class StudentDAOImpl implements StudentDAO{
 	@Override
 	public boolean delete(Long id) {
 		
-		Assistent student = assistCollection.find(eq("student.reg_number", id)).first();
-		if(student != null) {
+		Assistent studentAssistent = assistCollection.find(eq("student.reg_number", id)).first();
+		if(studentAssistent != null) {
 			return false;
 		}
+		Student studentAdvisor = collection.find(eq("advisor.reg_number", id)).first();
+		if(studentAdvisor != null) {
+			return false;
+		}
+		
 		collection.deleteOne(eq("reg_number", id));
 		return true;
 	}
