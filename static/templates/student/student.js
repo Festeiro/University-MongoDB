@@ -74,6 +74,9 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 		
 		StudentService.delete(student.reg_number).then(function(response){			
 			$scope.listStudents();
+			if(response.data == false){
+				$window.alert("Existe alguma relacao" + status);
+			}
 		},function(http, status){
 			console.log()
 			$window.alert("n deu boa" + status);

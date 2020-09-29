@@ -38,7 +38,6 @@ public class AssistentDAOImpl implements AssistentDAO{
 			collection.findOneAndReplace(eq("student.reg_number", assistent.getStudent().getReg_number()), assistent);
 		}
 		
-		
 	}
 
 	@Override

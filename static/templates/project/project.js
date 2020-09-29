@@ -60,6 +60,9 @@ module.controller('ProjectController', function($filter, $http, $scope, $window,
 		
 		ProjectService.delete(project.projectNumber).then(function(response){			
 			$scope.listProjects();
+			if(response.data == false){
+				$window.alert("Existe alguma relacao" + status);
+			}
 		},function(http, status){
 			$window.alert("n deu boa" + status);
 		});

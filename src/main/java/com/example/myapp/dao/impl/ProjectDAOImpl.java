@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.example.myapp.dao.ProjectDAO;
 import com.example.myapp.factory.DatabaseConnection;
 import com.example.myapp.model.Assistent;
+import com.example.myapp.model.Participates;
 import com.example.myapp.model.Project;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -17,10 +18,12 @@ public class ProjectDAOImpl implements ProjectDAO{
 	ProfessorDAOImpl professorDAOImpl = new ProfessorDAOImpl();
 	private MongoCollection<Project> collection;
 	private MongoCollection<Assistent> assistCollection;
+	private MongoCollection<Participates> participatesCollection;
 	
 	public ProjectDAOImpl() {
 		collection = DatabaseConnection.getConnection().getCollection("projeto", Project.class);
 		assistCollection = DatabaseConnection.getConnection().getCollection("assiste", Assistent.class);
+		participatesCollection = DatabaseConnection.getConnection().getCollection("participa", Participates.class);
 	}
 	
 	private boolean exists(Project project) {
@@ -45,11 +48,14 @@ public class ProjectDAOImpl implements ProjectDAO{
 	@Override
 	public boolean delete(Long id) {
 		
-		Assistent student = assistCollection.find(eq("project.projectNumber", id)).first();
-		if(student != null) {
+		Assistent assists = assistCollection.find(eq("project.projectNumber", id)).first();
+		if(assists != null) {
 			return false;
 		}
+		
+		participatesCollection.deleteMany(eq("project.projectNumber", id));
 		collection.deleteOne(eq("projectNumber", id));
+		
 		return true;
 	}
 

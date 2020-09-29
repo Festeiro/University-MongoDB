@@ -34,8 +34,7 @@ public class ProjectController {
 	@DeleteMapping(path="/delete")
 	public boolean delete(@RequestParam Long id) {
 	
-		projectDAO.delete(id);
-		return false;
+		return projectDAO.delete(id);
 	}
 	
 	@GetMapping(path="/list")

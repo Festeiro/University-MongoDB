@@ -32,8 +32,7 @@ public class StudentController {
 	@DeleteMapping(path="/delete")
 	public boolean delete(@RequestParam Long id) {
 	
-		studentDAO.delete(id);
-		return false;
+		return studentDAO.delete(id);
 	}
 	
 	@GetMapping(path="/list")

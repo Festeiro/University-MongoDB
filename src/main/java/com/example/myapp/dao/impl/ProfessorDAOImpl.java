@@ -10,7 +10,6 @@ import com.example.myapp.model.Department;
 import com.example.myapp.model.Participates;
 import com.example.myapp.model.Professor;
 import com.example.myapp.model.Project;
-import com.example.myapp.model.Student;
 import com.example.myapp.model.Works;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
