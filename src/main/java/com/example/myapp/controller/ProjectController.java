@@ -32,7 +32,7 @@ public class ProjectController {
 	}
 	
 	@DeleteMapping(path="/delete")
-	public boolean delete(@RequestParam String id) {
+	public boolean delete(@RequestParam Long id) {
 	
 		projectDAO.delete(id);
 		return false;

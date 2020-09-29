@@ -1,11 +1,8 @@
 package com.example.myapp.dao.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import static com.mongodb.client.model.Filters.eq;
 
-import org.bson.Document;
-import org.bson.types.ObjectId;
+import java.util.ArrayList;
 
 import com.example.myapp.dao.ProjectDAO;
 import com.example.myapp.factory.DatabaseConnection;
@@ -14,50 +11,54 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 
-	public class ProjectDAOImpl implements ProjectDAO{
+public class ProjectDAOImpl implements ProjectDAO{
 
-		ProfessorDAOImpl professorDAOImpl = new ProfessorDAOImpl();
-		private MongoCollection<Project> collection;
+	ProfessorDAOImpl professorDAOImpl = new ProfessorDAOImpl();
+	private MongoCollection<Project> collection;
+	
+	public ProjectDAOImpl() {
+		collection = DatabaseConnection.getConnection().getCollection("projeto", Project.class);
+	}
+	
+	private boolean exists(Project project) {
 		
-		public ProjectDAOImpl() {
-			collection = DatabaseConnection.getConnection().getCollection("projeto", Project.class);
-		}
+		Project foundProject = collection.find(eq("projectNumber", project.getProjectNumber())).first();
 		
-		@Override
-		public void save(Project project) {
-			collection.insertOne(project);
+		return foundProject != null;
+	}
+	
+	@Override
+	public void save(Project project) {	
+		
+		boolean isUpdate = exists(project);
+		
+		if(!isUpdate) {
+			collection.insertOne(project);				
+		}else {
+			collection.findOneAndReplace(eq("projectNumber", project.getProjectNumber()), project);
 		}
+	}
 
-		@Override
-		public boolean delete(String id) {
-			collection.deleteOne(new Document("numero", new ObjectId(id)));
-			return true;
-		}
+	@Override
+	public boolean delete(Long id) {
+		collection.deleteOne(eq("projectNumber", id));
+		return true;
+	}
 
-		@Override
-		public ArrayList<Project> listAll(){
-			ArrayList<Project> projects = new ArrayList<Project>();
-			FindIterable<Project> findIterable = collection.find();
-			MongoCursor<Project> cursor = findIterable.iterator();
-			
-			while(cursor.hasNext()) {
-				projects.add(cursor.next());
-			}
-			return projects;
-		}
+	@Override
+	public ArrayList<Project> listAll(){
+		ArrayList<Project> projects = new ArrayList<Project>();
+		FindIterable<Project> findIterable = collection.find();
+		MongoCursor<Project> cursor = findIterable.iterator();
 		
-		public Project listByProjectNumber(Long projectNumber){
-			return null;
+		while(cursor.hasNext()) {
+			projects.add(cursor.next());
 		}
-		
-		private boolean exists(Project project) {
-			
-			String sql = "SELECT * FROM Projeto WHERE Numero = " + project.getProjectNumber();
-			boolean exists = false;
-			
-			
-			return exists;
-		}
-
+		return projects;
+	}
+	
+	public Project listByProjectNumber(Long projectNumber){
+		return null;
+	}
 
 }
