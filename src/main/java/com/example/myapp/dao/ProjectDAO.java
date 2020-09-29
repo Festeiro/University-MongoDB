@@ -8,7 +8,7 @@ public interface ProjectDAO {
 
 	public void save(Project project);
 
-	public boolean delete(String id);
+	public boolean delete(Long id);
 
 	public ArrayList<Project> listAll();
 	

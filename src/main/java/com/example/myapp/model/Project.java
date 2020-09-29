@@ -1,9 +1,5 @@
 package com.example.myapp.model;
 
-import java.sql.Timestamp;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 public class Project {
 
 	private Long projectNumber;
