@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.example.myapp.dao.StudentDAO;
 import com.example.myapp.factory.DatabaseConnection;
+import com.example.myapp.model.Assistent;
 import com.example.myapp.model.Student;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
@@ -15,9 +16,11 @@ import com.mongodb.client.MongoCursor;
 public class StudentDAOImpl implements StudentDAO{
 
 	private MongoCollection<Student> collection;
+	private MongoCollection<Assistent> assistCollection;
 	
 	public StudentDAOImpl() {
 		collection = DatabaseConnection.getConnection().getCollection("estudante", Student.class);
+		assistCollection = DatabaseConnection.getConnection().getCollection("assiste", Assistent.class);
 	}
 	
 	private boolean exists(Student student) {
@@ -58,6 +61,11 @@ public class StudentDAOImpl implements StudentDAO{
 	
 	@Override
 	public boolean delete(Long id) {
+		
+		Assistent student = assistCollection.find(eq("student.reg_number", id)).first();
+		if(student != null) {
+			return false;
+		}
 		collection.deleteOne(eq("reg_number", id));
 		return true;
 	}
