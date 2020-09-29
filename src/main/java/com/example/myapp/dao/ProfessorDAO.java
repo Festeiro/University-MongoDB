@@ -2,8 +2,6 @@ package com.example.myapp.dao;
 
 import java.util.ArrayList;
 
-import org.bson.types.ObjectId;
-
 import com.example.myapp.model.Professor;
 
 public interface ProfessorDAO {

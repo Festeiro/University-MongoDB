@@ -4,8 +4,6 @@ import static com.mongodb.client.model.Filters.eq;
 
 import java.util.ArrayList;
 
-import org.bson.types.ObjectId;
-
 import com.example.myapp.dao.ProfessorDAO;
 import com.example.myapp.factory.DatabaseConnection;
 import com.example.myapp.model.Professor;
@@ -21,8 +19,16 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 	public ProfessorDAOImpl() {
 		collection = DatabaseConnection.getConnection().getCollection("professor", Professor.class);
 	}
+
+	private boolean exists(Professor professor) {
+		
+		Professor foundProfessor = collection.find(eq("reg_number", professor.getReg_number())).first();
+		
+		return foundProfessor != null;
+	}
 	
 	public void generateReg_number(Professor professor) {
+		
 		FindIterable<Professor> findIterable = collection.find().sort(new BasicDBObject( "reg_number" , -1 ) ).limit(1);
 		MongoCursor<Professor> cursor = findIterable.iterator();
 		Long maxValue = 0L;
@@ -40,8 +46,15 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 	
 	@Override
 	public void save(Professor professor) {
-		generateReg_number(professor);
-		collection.insertOne(professor);	
+		
+		boolean isUpdate = exists(professor);
+		
+		if(!isUpdate) {
+			generateReg_number(professor);
+			collection.insertOne(professor);	
+		}else {
+			collection.findOneAndReplace(eq("reg_number", professor.getReg_number()), professor);
+		}
 	}
 
 	@Override
