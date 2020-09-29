@@ -1,5 +1,7 @@
 package com.example.myapp.dao.impl;
 
+import static com.mongodb.client.model.Filters.eq;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,40 +13,36 @@ import com.example.myapp.factory.DatabaseConnection;
 import com.example.myapp.model.Assistent;
 import com.example.myapp.model.Project;
 import com.example.myapp.model.Student;
+import com.example.myapp.model.Works;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 
 public class AssistentDAOImpl implements AssistentDAO{
 
 	ProjectDAOImpl projectDAO = new ProjectDAOImpl();
 	StudentDAOImpl studentDAO = new StudentDAOImpl();
 	ProfessorDAOImpl profDAO = new ProfessorDAOImpl();
+	private MongoCollection<Assistent> collection;
 	
 	public AssistentDAOImpl() {
+		collection = DatabaseConnection.getConnection().getCollection("assiste", Assistent.class);
 	}
 
 	private boolean exists(Assistent assistent) {
 		
-		String sql = "SELECT * FROM Assiste WHERE numProjeto = " + assistent.getProject().getProjectNumber()
-					+ " AND matsupervisor = " + assistent.getProfessor().getReg_number();
-		boolean exists = false;
-		
-		
-		return exists;
+		Assistent foundAssistent = collection.find(eq("student.reg_number", assistent.getStudent().getReg_number())).first();
+		return foundAssistent != null;
 	}
 	
 	@Override
 	public void save(Assistent assistent) {
-		String sql = "";
 		boolean isUpdate = exists(assistent);
 		
 		if(!isUpdate) {
-			sql = "INSERT INTO Assiste (NumProjeto, MatEstudante, MatSupervisor)"
-					+ "VALUES("	+ assistent.getProject().getProjectNumber() + ", " 
-					+ assistent.getStudent().getReg_number() + ", "
-					+ assistent.getProfessor().getReg_number() + ")";
+			collection.insertOne(assistent);
 		} else {
-			sql = "Update Assiste"
-					+ " SET MatEstudante = " + assistent.getStudent().getReg_number()
-					+ " AND MatSupervisor = " + assistent.getProfessor().getReg_number();
+			collection.findOneAndReplace(eq("student.reg_number", assistent.getStudent().getReg_number()), assistent);
 		}
 		
 		
@@ -52,17 +50,21 @@ public class AssistentDAOImpl implements AssistentDAO{
 
 	@Override
 	public boolean delete(Long studentRegNumber) {
-		String sql = "DELETE FROM Assiste WHERE matEstudante = " + studentRegNumber;
-		
+		collection.deleteOne(eq("student.reg_number", studentRegNumber));
 		return true;
 	}
 
 	@Override
 	public ArrayList<Assistent> listByStudentRegNumber(Long studentRegNumber) {
-		String sql = "SELECT * FROM Assiste WHERE MatEstudante = " + studentRegNumber;
-		ArrayList<Assistent> assistentList = new ArrayList<Assistent>();
+		ArrayList<Assistent> assists = new ArrayList<Assistent>();
+		FindIterable<Assistent> findIterable = collection.find();
+		MongoCursor<Assistent> cursor = findIterable.iterator();
 		
-		return assistentList;
+		while(cursor.hasNext()) {
+			assists.add(cursor.next());
+		}
+		
+		return assists;
 	}
 
 }
