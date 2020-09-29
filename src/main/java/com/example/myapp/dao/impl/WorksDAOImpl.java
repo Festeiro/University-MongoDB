@@ -31,7 +31,6 @@ public class WorksDAOImpl implements WorksDAO{
 	@Override
 	public void save(Works works) {
 		
-		String sql = "";		
 		boolean isUpdate = exists(works);
 		
 		if(!isUpdate) {
