@@ -1,5 +1,6 @@
 package com.example.myapp.dao.impl;
 
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 
 import java.util.ArrayList;
@@ -24,7 +25,8 @@ public class AssistentDAOImpl implements AssistentDAO{
 
 	private boolean exists(Assistent assistent) {
 		
-		Assistent foundAssistent = collection.find(eq("student.reg_number", assistent.getStudent().getReg_number())).first();
+		Assistent foundAssistent = collection.find(and(eq("student.reg_number", assistent.getStudent().getReg_number()),
+				eq("project.projectNumber", assistent.getProject().getProjectNumber()))).first();
 		return foundAssistent != null;
 	}
 	
@@ -49,7 +51,7 @@ public class AssistentDAOImpl implements AssistentDAO{
 	@Override
 	public ArrayList<Assistent> listByStudentRegNumber(Long studentRegNumber) {
 		ArrayList<Assistent> assists = new ArrayList<Assistent>();
-		FindIterable<Assistent> findIterable = collection.find();
+		FindIterable<Assistent> findIterable = collection.find(eq("student.reg_number", studentRegNumber));
 		MongoCursor<Assistent> cursor = findIterable.iterator();
 		try {
 	

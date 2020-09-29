@@ -52,7 +52,7 @@ public class ParticipatesDAOImpl implements ParticipatesDAO{
 	@Override
 	public ArrayList<Participates> listByProjectNumber(Long projectNumber){
 		ArrayList<Participates> participatess = new ArrayList<Participates>();
-		FindIterable<Participates> findIterable = collection.find();
+		FindIterable<Participates> findIterable = collection.find(eq("project.projectNumber", projectNumber));
 		MongoCursor<Participates> cursor = findIterable.iterator();
 		
 		try {

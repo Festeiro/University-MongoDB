@@ -52,7 +52,7 @@ public class WorksDAOImpl implements WorksDAO{
 	@Override
 	public ArrayList<Works> listByProfessorRegNumber(Long professorRegNumber){
 		ArrayList<Works> workss = new ArrayList<Works>();
-		FindIterable<Works> findIterable = collection.find();
+		FindIterable<Works> findIterable = collection.find(eq("professor.reg_number", professorRegNumber));
 		MongoCursor<Works> cursor = findIterable.iterator();
 		
 		try {

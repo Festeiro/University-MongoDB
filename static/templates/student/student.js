@@ -77,7 +77,6 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 			if(response.data == false){
 				$window.alert("Existe alguma relacao" + status);
 			}
-			$scope.cancel();
 		},function(http, status){
 			console.log()
 			$window.alert("n deu boa" + status);
@@ -96,26 +95,25 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 	$scope.assistCols = [ {name: 'project_number', flex: '20', display: 'Num. Projeto'} ];
 		
 	var resetAssist = function(){
-		$scope.assistent = { student: $scope.student,
+		$scope.assist = { student: $scope.student,
 								project: $scope.project };
 	};
 	
 	$scope.listAssist = function(){
 		
-		AssistentService.listByStudentRegNumber($scope.assistent.student.reg_number).then(function(response){
+		AssistentService.listByStudentRegNumber($scope.assist.student.reg_number).then(function(response){
 			
 			$scope.assistents = response.data;
-			angular.forEach($scope.assistents, function(assistent){
-				if(assistent.project && assistent.project.projectNumber){
-					assistent.project_number = assistent.project.projectNumber.toString();
+			angular.forEach($scope.assistents, function(assist){
+				if(assist.project && assist.project.projectNumber){
+					assist.project_number = assist.project.projectNumber.toString();
 				}
 			});
 		});
 	};
 	
 	$scope.saveAssistent = function(){
-		$scope.assistent.project = $scope.assist.project;
-		AssistentService.save($scope.assistent).then(function(response){
+		AssistentService.save($scope.assist).then(function(response){
 			$scope.listAssist();
 			resetAssist();			
 		}, function(http, status){
@@ -124,7 +122,7 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 	};
 	
 	$scope.deleteAssist = function(works){
-		AssistentService.delete($scope.assistent.student.reg_number).then(function(response){
+		AssistentService.delete($scope.assist.student.reg_number).then(function(response){
 			$scope.listAssist();
 		},function(http, status){
 			$window.alert("nao deu boa " + status);

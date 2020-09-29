@@ -6,7 +6,7 @@ import com.example.myapp.model.Assistent;
 
 public interface AssistentDAO {
 
-public void save(Assistent assistent);
+	public void save(Assistent assistent);
 	
 	public boolean delete(Long studentRegNumber);
 	
