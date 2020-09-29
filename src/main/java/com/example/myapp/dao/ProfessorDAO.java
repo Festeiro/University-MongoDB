@@ -10,7 +10,7 @@ public interface ProfessorDAO {
 
 	public void save(Professor professor);
 
-	public void delete(ObjectId id);
+	public void delete(Long id);
 
 	public ArrayList<Professor> listAll();
 

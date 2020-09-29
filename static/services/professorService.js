@@ -20,7 +20,9 @@ module.service('ProfessorService', function($http) {
 		return $http({
 			method: 'POST',
 			url: "http://localhost:8080/professor/delete",
-			data: id
+			params:{
+				id: id
+			}
 		});
 	};
 });

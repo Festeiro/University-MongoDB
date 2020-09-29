@@ -33,13 +33,13 @@ module.controller('StudentController', function($http, $scope, $window, StudentS
 		
 			$scope.students = response.data;
 			angular.forEach($scope.students, function(student){
-				if(student.advisor && student.advisor.reg_number){
+				if(student.advisor && student.advisor.name){
 					
-					student.advisorRegAndName = student.advisor.reg_number.toString() + ' - ' + student.advisor.name; 
+					student.advisorRegAndName = student.advisor.reg_number + ' - ' + student.advisor.name; 
 				}
-				if(student.department && student.department.dep_number){
+				if(student.department && student.department.name){
 					
-					student.departmentDepAndName = student.department.dep_number.toString() + ' - ' + student.department.name; 
+					student.departmentDepAndName = student.department.dep_number + ' - ' + student.department.name; 
 				}
 			});
 		});
