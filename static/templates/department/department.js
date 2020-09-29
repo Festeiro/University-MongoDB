@@ -56,9 +56,10 @@ module.controller('DepartmentController', function($http, $scope, $window, Depar
 		
 		DepartmentService.delete(department.dep_number).then(function(response){			
 			$scope.listDepartments();
+			if(response.data == false){
+				$window.alert("Existe alguma relacao" + status);
+			}
 		},function(http, status){
-			console.log()
-			$window.alert("n deu boa" + status);
 		});
 	};
 	

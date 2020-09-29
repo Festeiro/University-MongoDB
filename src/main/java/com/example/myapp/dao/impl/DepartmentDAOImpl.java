@@ -8,6 +8,7 @@ import com.example.myapp.dao.DepartmentDAO;
 import com.example.myapp.factory.DatabaseConnection;
 import com.example.myapp.model.Department;
 import com.example.myapp.model.Student;
+import com.example.myapp.model.Works;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -16,10 +17,12 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 	
 	private MongoCollection<Department> collection;
 	private MongoCollection<Student> studCollection;
+	private MongoCollection<Works> profCollection;
 	
 	public DepartmentDAOImpl() {
 		collection = DatabaseConnection.getConnection().getCollection("departamento", Department.class);
 		studCollection = DatabaseConnection.getConnection().getCollection("estudante", Student.class);
+		profCollection = DatabaseConnection.getConnection().getCollection("trabalha", Works.class);
 	}
 	
 	private boolean exists(Department department) {
@@ -45,11 +48,16 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 	public boolean delete(Long id) {
 		
 		Student student = studCollection.find(eq("department.dep_number", id)).first();
-		if(student == null) {
-			collection.deleteOne(eq("dep_number", id));
-			return true;
+		if(student != null) {
+			return false;
 		}
 		
+		Works works = profCollection.find(eq("department.dep_number", id)).first();
+		if(works != null) {
+			return false;
+		}
+		
+		collection.deleteOne(eq("dep_number", id));
 		return false;
 	}
 		
