@@ -33,8 +33,7 @@ public class DepartmentController {
 	@DeleteMapping(path="/delete")
 	public boolean delete(@RequestParam Long id) {
 	
-		departmentDAO.delete(id);
-		return false;
+		return departmentDAO.delete(id);
 	}
 	
 	@GetMapping(path="/list")

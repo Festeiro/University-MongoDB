@@ -2,18 +2,11 @@ package com.example.myapp.dao.impl;
 
 import static com.mongodb.client.model.Filters.eq;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.example.myapp.dao.AssistentDAO;
 import com.example.myapp.factory.DatabaseConnection;
 import com.example.myapp.model.Assistent;
-import com.example.myapp.model.Project;
-import com.example.myapp.model.Student;
-import com.example.myapp.model.Works;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;

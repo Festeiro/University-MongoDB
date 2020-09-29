@@ -59,6 +59,7 @@ module.controller('DepartmentController', function($http, $scope, $window, Depar
 			if(response.data == false){
 				$window.alert("Existe alguma relacao" + status);
 			}
+			$scope.cancel();
 		},function(http, status){
 		});
 	};

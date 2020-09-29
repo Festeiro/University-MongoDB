@@ -29,9 +29,9 @@ public class ProfessorController {
 	}
 	
 	@PostMapping(path="/delete")
-	public void delete(@RequestParam Long id) {
+	public boolean delete(@RequestParam Long id) {
 	
-		profDAO.delete(id);
+		return profDAO.delete(id);
 	}
 	
 	@GetMapping(path="/list")

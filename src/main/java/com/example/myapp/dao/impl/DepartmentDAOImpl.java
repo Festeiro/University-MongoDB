@@ -58,7 +58,7 @@ public class DepartmentDAOImpl implements DepartmentDAO{
 		}
 		
 		collection.deleteOne(eq("dep_number", id));
-		return false;
+		return true;
 	}
 		
 	@Override
