@@ -1,5 +1,7 @@
 package com.example.myapp.dao.impl;
 
+import static com.mongodb.client.model.Filters.eq;
+
 import java.util.ArrayList;
 
 import org.bson.Document;
@@ -14,24 +16,16 @@ import com.mongodb.client.MongoCursor;
 
 public class ProfessorDAOImpl implements ProfessorDAO{
 
-	private MongoCollection<Document> collection;
+	private MongoCollection<Professor> collection;
 	
 	public ProfessorDAOImpl() {
-		collection = DatabaseConnection.getConnection().getCollection("Professor");
+		collection = DatabaseConnection.getConnection().getCollection("professor", Professor.class);
 	}
 	
 	@Override
 	public void save(Professor professor) {
-		Document dbDummy = new Document();
-		String name = professor.getName();
-		Integer age = professor.getAge();
-		String room = professor.getClassRoom();
-		String speciality = professor.getSpeciality();
-		dbDummy.append("nome", name);
-		dbDummy.append("idade", age);
-		dbDummy.append("sala", room);
-		dbDummy.append("especialidade", speciality);
-		collection.insertOne(dbDummy);
+		
+		collection.insertOne(professor);
 		
 	}
 
@@ -42,35 +36,20 @@ public class ProfessorDAOImpl implements ProfessorDAO{
 
 	@Override
 	public ArrayList<Professor> listAll(){
-		int defaultValue = 0;
-		ArrayList<Professor> professorList = new ArrayList<>();
-		FindIterable<Document> a = collection.find();
-		MongoCursor<Document> resultIterator = a.cursor();
 		
-		while(resultIterator.hasNext()) {
-			Document doc = resultIterator.next();
-			ObjectId reg_number = doc.getObjectId("_id"); 
-			String name = doc.getString("nome");
-			Integer age = doc.getInteger("idade", defaultValue);
-			String classRoom = doc.getString("sala");
-			String speciality = doc.getString("especialidade");
-
-			Professor professor = new Professor();
-			professor.setReg_number(reg_number.toString());
-			professor.setName(name);
-			professor.setAge(age);
-			professor.setClassRoom(classRoom);
-			professor.setSpeciality(speciality);
-			professorList.add(professor);
+		ArrayList<Professor> professors = new ArrayList<Professor>();
+		FindIterable<Professor> findIterable = collection.find();
+		MongoCursor<Professor> cursor = findIterable.iterator();
+		
+		while(cursor.hasNext()) {
+			professors.add(cursor.next());
 		}
-		return professorList;
+		
+		return professors;
 	}
 	
 	public Professor listByRegNumber(Long reg_number){
 		
-		Professor prof = new Professor();
-		
-		
-		return prof;
+		return collection.find(eq("reg_number", reg_number)).first();
 	}
 }
